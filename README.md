@@ -173,3 +173,25 @@ Test: write down an instruction on how to test your solution.
 * Saas optionavalable like BlazeMeter
 * Saas solution for monitoring app like datadog and new relic
 
+You are tasked to find out on how many connections on each database host.
+
+* Assuming we are running PostgreSQL
+
+```sql
+select  * from
+(select count(*) used from pg_stat_activity) q1,
+(select setting::int res_for_super from pg_settings where name=$$superuser_reserved_connections$$) q2,
+(select setting::int max_conn from pg_settings where name=$$max_connections$$) q3;
+```
+
+> NOTE pg_stat_activity gives all connections, regardless of user.
+
+Return the most frequently-occuring IP
+
+```sh
+grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" "${1:?}" | sort -n | uniq -c | sort -nr | head -10 |
+while read IP
+	do
+    	echo "$IP"
+done
+```
